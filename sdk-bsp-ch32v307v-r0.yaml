@@ -1,0 +1,106 @@
+board:
+  buy_url_cn: N/A
+  buy_url_global: N/A
+  debug_interface: 私有串行两线接口
+  debugger: WCH-LINK
+  description_en: 'CH32V307V-R1 is a development board based on the 32bit RISC-V core
+    launched by WCH. The highest frequency is 144Mhz. '
+  description_zh: CH32V307V-R1 是 WCH 推出的一款基于 RISC-V 内核的开发板，最高主频为 144Mhz。
+  emulator_machine: ''
+  large_image: documents/images/board2.jpg
+  name: CH32V307V-R1
+  price_cn: N/A CNY
+  price_global: N/A USD
+  sale_contact_cn: http://www.wch.cn
+  sale_contact_global: http://www.wch.cn
+  small_image: documents/images/board1.png
+  vendor: WCH
+  version: 1.0.6
+chip:
+  chip_name: CH32V307VCT6
+  clock_source: HSE
+  device_vendor: WCH
+  family_name: CH32
+  rx_name: PA10
+  series_name: CH32V3
+  source_freq: '8000000'
+  sub_series_name: CH32V307
+  target_freq: '240000000'
+  tx_name: PA9
+  uart_name: UART1
+docs:
+- category: manual
+  file: documents/CH32FV2x_V3xRM.pdf
+  title: User manual
+- category: register 
+  file: documents/CH32V20x_30xDS0.pdf
+  title: Datasheet 
+- category: schematic diagram 
+  file: documents/CH32V307SCH.pdf
+  title: Datasheet 
+- category: 评估板说明书
+  file: documents/CH32V307评估板说明书.pdf
+  title: Datasheet  
+example_projects: []
+features:
+- CH32V307VCT6：main frequency 144MHz, FLASH and RAM can be configured
+- LED：2,user LEDs， LED1（blue），LED2(red).
+- Buttons：3, Reset， User and Download.
+- USB: 2, Type-C.
+- ETH：1, built-in 10M PHY.
+- Onboard WCH link download debugging tool.
+features_zh:
+- MCU：CH32V307VCT6，主频 144MHz，FLASH和RAM可配置
+- LED：2个，用户 LEDs， LED1（blue），LED2(red)。
+- 按键：3个，Reset， User 和 Download。
+- USB：2个，Tpye-C。
+- 网口：1个，内置 10M PHY。
+- 板载 WCH-Link 下载调试工具。
+pkg_type: Board_Support_Packages
+pkg_vendor: WCH
+pkg_version: 1.0.6
+template_projects:
+- builtin_files:
+  - files_and_folders:
+    - .config
+    - .cproject
+    - .gitignore
+    - .project
+    - .settings
+    - applications
+    - board
+    - cconfig.h
+    - figures
+    - Kconfig
+    - libcpu
+    - libraries
+    - link.lds
+    - makefile.targets
+    - README.md
+    - rt-thread
+    - rtconfig.h
+    - rtconfig.py
+    - rtconfig_preinc.h
+    - SConscript
+    - SConstruct
+    source_path_offset: project_0
+    target_path_offset: ''
+  external_files:
+  - package_name: RISC-V-GCC-WCH
+    package_type: ToolChain_Support_Packages
+    package_vendor: 'WCH'
+    package_version: 8.2.0
+    source_path_offset: '.'
+    target_path_offset: '.'
+    files_and_folders: []
+  - package_name: WCH-LINK_Debugger
+    package_type: Debugger_Support_Packages
+    package_vendor: 'WCH'
+    package_version: 1.0.2
+    source_path_offset: '.'  
+    target_path_offset: '.'
+    files_and_folders: []
+  project_description: ''
+  project_name: project_0
+  project_type: rt-thread|@full|@latest
+yaml_version: 3
