@@ -1,1 +1,1 @@
-# sdk-bsp-ch32v307v-r0
+# sdk-bsp-ch32v307v-r1
