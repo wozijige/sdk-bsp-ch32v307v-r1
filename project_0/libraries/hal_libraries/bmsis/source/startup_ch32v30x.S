@@ -366,10 +366,10 @@ handle_reset:
     li t0, 0x1f
     csrw 0xbc0, t0
 
-    /* Enable nested and hardware stack */
-#	li t0, 0x1f
-#	csrw 0x804, t0
-	csrw 0x804, zero
+    /* Enable hardware stack */
+    li t0,0x1
+	csrw 0x804, t0
+
 
     /* Enable floating point and interrupt */
    	li t0, 0x7800

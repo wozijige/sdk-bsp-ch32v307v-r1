@@ -5,6 +5,8 @@
 * Date               : 2021/06/06
 * Description        : This file contains all the functions prototypes for the 
 *                      OPA firmware library.
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
 *******************************************************************************/ 
 #ifndef __CH32V30x_OPA_H
 #define __CH32V30x_OPA_H
@@ -58,6 +60,7 @@ typedef struct
   OPA_NSEL_TypeDef  NSEL;         /* Specifies the negative channel of OPA */
   OPA_Mode_TypeDef  Mode;         /* Specifies the mode of OPA */
 }OPA_InitTypeDef;
+
 
 void OPA_DeInit(void);
 void OPA_Init(OPA_InitTypeDef* OPA_InitStruct);

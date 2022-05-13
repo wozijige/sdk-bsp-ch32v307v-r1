@@ -2,8 +2,10 @@
 * File Name          : main.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2021/09/09
+* Date               : 2021/06/06
 * Description        : Main program body.
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
 *******************************************************************************/
 #include "ch32v30x.h"
 #include <rtthread.h>
@@ -20,7 +22,13 @@
 
 /* Global Variable */
 
-
+/*********************************************************************
+ * @fn      main
+ *
+ * @brief   Main program.
+ *
+ * @return  none
+ */
 int main(void)
 {
     rt_kprintf("MCU: CH32V307\n");
@@ -39,7 +47,13 @@ int main(void)
 }
 
 
-
+/*********************************************************************
+ * @fn      led
+ *
+ * @brief   gpio operation by pins driver.
+ *
+ * @return  none
+ */
 int led(void)
 {
     rt_uint8_t count;

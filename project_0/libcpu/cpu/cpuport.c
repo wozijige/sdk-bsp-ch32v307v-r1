@@ -146,6 +146,24 @@ void sw_clearpend(void)
     SysTick->CTLR &= ~(1<<31);
 }
 
+/*
+ * disable interrupt and save mstatus
+ */
+rt_base_t rt_hw_interrupt_disable(void)
+{
+    rt_base_t value=0;
+    asm("csrrw %0, mstatus, %1":"=r"(value):"r"(0x7800));
+    return value;
+}
+
+/*
+ * enable interrupt and resume mstatus
+ */
+void rt_hw_interrupt_enable(rt_base_t level)
+{
+    asm("csrw mstatus, %0": :"r"(level));
+}
+
 
 /*
  * #ifdef RT_USING_SMP
@@ -165,22 +183,8 @@ void rt_hw_context_switch_interrupt(rt_ubase_t from, rt_ubase_t to)
     sw_setpend();
 }
 
-/*
- * @brief Do rt-thread context switch in task context
- *
- * @param from thread sp of from thread
- * @param to thread sp of to thread
- */
-void rt_hw_context_switch(rt_ubase_t from, rt_ubase_t to)
-{
-    rt_interrupt_from_thread = from;
-    rt_interrupt_to_thread = to;
-    /* switch just in sw_handler */
-    sw_setpend();
-}
-
 /* shutdown CPU */
-void rt_hw_cpu_shutdown()
+void rt_hw_cpu_shutdown(void)
 {
     rt_uint32_t level;
     rt_kprintf("shutdown...\n");

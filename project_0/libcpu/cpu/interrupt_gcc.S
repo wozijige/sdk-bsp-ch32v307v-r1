@@ -11,43 +11,9 @@
 #include "cpuport.h"
 
 .global SW_handler
-.align 3
+.align 2
 SW_handler:
     /* save all from thread context */
-    addi sp, sp, -32 * REGBYTES
-    STORE x1,   1 * REGBYTES(sp)
-    STORE x5,   5 * REGBYTES(sp)
-	/* saved mstatus */
-    csrr t0,    mstatus
-    STORE t0,   2 * REGBYTES(sp)
-    STORE x4,   4 * REGBYTES(sp)
-    STORE x6,   6 * REGBYTES(sp)
-    STORE x7,   7 * REGBYTES(sp)
-    STORE x8,   8 * REGBYTES(sp)
-    STORE x9,   9 * REGBYTES(sp)
-    STORE x10, 10 * REGBYTES(sp)
-    STORE x11, 11 * REGBYTES(sp)
-    STORE x12, 12 * REGBYTES(sp)
-    STORE x13, 13 * REGBYTES(sp)
-    STORE x14, 14 * REGBYTES(sp)
-    STORE x15, 15 * REGBYTES(sp)
-    STORE x16, 16 * REGBYTES(sp)
-    STORE x17, 17 * REGBYTES(sp)
-    STORE x18, 18 * REGBYTES(sp)
-    STORE x19, 19 * REGBYTES(sp)
-    STORE x20, 20 * REGBYTES(sp)
-    STORE x21, 21 * REGBYTES(sp)
-    STORE x22, 22 * REGBYTES(sp)
-    STORE x23, 23 * REGBYTES(sp)
-    STORE x24, 24 * REGBYTES(sp)
-    STORE x25, 25 * REGBYTES(sp)
-    STORE x26, 26 * REGBYTES(sp)
-    STORE x27, 27 * REGBYTES(sp)
-    STORE x28, 28 * REGBYTES(sp)
-    STORE x29, 29 * REGBYTES(sp)
-    STORE x30, 30 * REGBYTES(sp)
-    STORE x31, 31 * REGBYTES(sp)
-
 #ifdef ARCH_RISCV_FPU
     addi    sp, sp, -32 * FREGBYTES
     FSTORE  f0, 0 * FREGBYTES(sp)
@@ -84,6 +50,46 @@ SW_handler:
     FSTORE  f31, 31 * FREGBYTES(sp)
 #endif
 
+    addi sp, sp, -32 * REGBYTES
+    STORE x5,   5 * REGBYTES(sp)
+
+    /* saved MPIE */
+ 	li    t0,   0x80
+    STORE t0,   2 * REGBYTES(sp)
+
+	/* Temporarily disable HPE  */
+	li   t0,    0x20
+	csrs 0x804, t0
+
+    STORE x1,   1 * REGBYTES(sp)
+    STORE x4,   4 * REGBYTES(sp)
+    STORE x6,   6 * REGBYTES(sp)
+    STORE x7,   7 * REGBYTES(sp)
+    STORE x8,   8 * REGBYTES(sp)
+    STORE x9,   9 * REGBYTES(sp)
+    STORE x10, 10 * REGBYTES(sp)
+    STORE x11, 11 * REGBYTES(sp)
+    STORE x12, 12 * REGBYTES(sp)
+    STORE x13, 13 * REGBYTES(sp)
+    STORE x14, 14 * REGBYTES(sp)
+    STORE x15, 15 * REGBYTES(sp)
+    STORE x16, 16 * REGBYTES(sp)
+    STORE x17, 17 * REGBYTES(sp)
+    STORE x18, 18 * REGBYTES(sp)
+    STORE x19, 19 * REGBYTES(sp)
+    STORE x20, 20 * REGBYTES(sp)
+    STORE x21, 21 * REGBYTES(sp)
+    STORE x22, 22 * REGBYTES(sp)
+    STORE x23, 23 * REGBYTES(sp)
+    STORE x24, 24 * REGBYTES(sp)
+    STORE x25, 25 * REGBYTES(sp)
+    STORE x26, 26 * REGBYTES(sp)
+    STORE x27, 27 * REGBYTES(sp)
+    STORE x28, 28 * REGBYTES(sp)
+    STORE x29, 29 * REGBYTES(sp)
+    STORE x30, 30 * REGBYTES(sp)
+    STORE x31, 31 * REGBYTES(sp)
+
     /* switch to interrupt stack */
 	csrrw sp,mscratch,sp
     call  rt_interrupt_enter
@@ -96,10 +102,9 @@ SW_handler:
     /* if rt_thread_switch_interrupt_flag=1,then clear it  */
     la    s0, rt_thread_switch_interrupt_flag
     lw    s2, 0(s0)
-    beqz  s2, spurious_interrupt
+    beqz  s2, 1f
     sw    zero, 0(s0)
-
-spurious_interrupt:
+#1:
     csrr  a0, mepc
     STORE a0, 0 * REGBYTES(sp)
 
@@ -114,9 +119,12 @@ spurious_interrupt:
     LOAD  a0,  0 * REGBYTES(sp)
     csrw  mepc, a0
 
-    LOAD  x1,   1 * REGBYTES(sp)
-    LOAD  t0,   2 * REGBYTES(sp)
-	csrw   mstatus, t0
+1:  LOAD  x1,   1 * REGBYTES(sp)
+
+	li t0,0x7800
+	csrs mstatus, t0
+	LOAD t0, 2*REGBYTES(sp)
+	csrs mstatus, t0
 
     LOAD  x4,   4 * REGBYTES(sp)
     LOAD  x5,   5 * REGBYTES(sp)
