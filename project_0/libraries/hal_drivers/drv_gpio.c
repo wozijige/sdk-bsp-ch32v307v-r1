@@ -348,6 +348,7 @@ static rt_err_t ch32_pin_irq_enable(struct rt_device *device, rt_base_t pin,
     const struct pin_irq_map *irqmap;
     rt_base_t level;
     rt_int32_t irqindex = -1;
+    rt_uint8_t gpio_port_souce=0;
     GPIO_InitTypeDef GPIO_InitStruct={0};
     EXTI_InitTypeDef EXTI_InitStructure={0};
 	
@@ -399,8 +400,15 @@ static rt_err_t ch32_pin_irq_enable(struct rt_device *device, rt_base_t pin,
             break;
         }
         GPIO_Init(index->gpio, &GPIO_InitStruct);
-        EXTI_Init(&EXTI_InitStructure);
 		
+		if(index->gpio==GPIOA) gpio_port_souce=GPIO_PortSourceGPIOA;
+        if(index->gpio==GPIOB) gpio_port_souce=GPIO_PortSourceGPIOB;
+        if(index->gpio==GPIOC) gpio_port_souce=GPIO_PortSourceGPIOC;
+        if(index->gpio==GPIOD) gpio_port_souce=GPIO_PortSourceGPIOD;
+        if(index->gpio==GPIOE) gpio_port_souce=GPIO_PortSourceGPIOE;
+        GPIO_EXTILineConfig(gpio_port_souce,(rt_uint8_t)irqindex);
+		
+        EXTI_Init(&EXTI_InitStructure);
         NVIC_SetPriority(irqmap->irqno,5<<4);
         NVIC_EnableIRQ( irqmap->irqno );
         pin_irq_enable_mask |= irqmap->pinbit;
@@ -474,11 +482,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     pin_irq_hdr(bit2bitno(GPIO_Pin));
 }
 
-void EXTI0_IRQHandler(void) __attribute__((interrupt()));
-void EXTI1_IRQHandler(void) __attribute__((interrupt()));
-void EXTI3_IRQHandler(void) __attribute__((interrupt()));
-void EXTI4_IRQHandler(void) __attribute__((interrupt()));
-void EXTI9_5_IRQHandler(void) __attribute__((interrupt()));
+void EXTI0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI4_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void EXTI9_5_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 void EXTI0_IRQHandler(void)
 {

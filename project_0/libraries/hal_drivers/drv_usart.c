@@ -18,7 +18,6 @@
 #define LOG_TAG              "drv.uart"
 #include <drv_log.h>
 
-#define  BSP_USING_UART1
 
 #if !defined(BSP_USING_UART1) && !defined(BSP_USING_UART2) && !defined(BSP_USING_UART3) && !defined(BSP_USING_UART4) && \
     !defined(BSP_USING_UART5) && !defined(BSP_USING_UART6) && !defined(BSP_USING_UART7) && !defined(BSP_USING_UART8) 
@@ -207,7 +206,20 @@ static rt_err_t ch32_configure(struct rt_serial_device *serial, struct serial_co
     }
     if(uart->config->Instance==UART7)
     {
+        GPIO_InitTypeDef GPIO_InitStructure={0};
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART7, ENABLE);
 
+        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+        GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+        GPIO_Init(GPIOC, &GPIO_InitStructure);
+        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+        GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+        GPIO_Init(GPIOC, &GPIO_InitStructure);
+        USART_Init(uart->config->Instance,&uart->Init);
+        USART_Cmd(uart->config->Instance, ENABLE);
     }
     if(uart->config->Instance==UART8)
     {
@@ -293,7 +305,7 @@ static const struct rt_uart_ops ch32_uart_ops =
 
 
 #ifdef BSP_USING_UART1
-void USART1_IRQHandler(void) __attribute__((interrupt()));
+void USART1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void USART1_IRQHandler(void)
 {
     GET_INT_SP();
@@ -305,7 +317,7 @@ void USART1_IRQHandler(void)
 #endif
 
 #ifdef BSP_USING_UART2
-void USART2_IRQHandler(void) __attribute__((interrupt()));
+void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void USART2_IRQHandler(void)
 {
     GET_INT_SP();
@@ -317,7 +329,7 @@ void USART2_IRQHandler(void)
 #endif
 
 #ifdef BSP_USING_UART3
-void USART3_IRQHandler(void) __attribute__((interrupt()));
+void USART3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void USART3_IRQHandler(void)
 {
     GET_INT_SP();
@@ -329,7 +341,7 @@ void USART3_IRQHandler(void)
 #endif
 
 #ifdef BSP_USING_UART4
-void UART4_IRQHandler(void) __attribute__((interrupt()));
+void UART4_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART4_IRQHandler(void)
 {
     GET_INT_SP();
@@ -341,7 +353,7 @@ void UART4_IRQHandler(void)
 #endif
 
 #ifdef BSP_USING_UART5
-void UART5_IRQHandler(void) __attribute__((interrupt()));
+void UART5_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART5_IRQHandler(void)
 {
     GET_INT_SP();
@@ -353,7 +365,7 @@ void UART5_IRQHandler(void)
 #endif
 
 #ifdef BSP_USING_UART6
-void UART6_IRQHandler(void) __attribute__((interrupt()));
+void UART6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART6_IRQHandler(void)
 {
     GET_INT_SP();
@@ -365,7 +377,7 @@ void UART6_IRQHandler(void)
 #endif
 
 #ifdef BSP_USING_UART7
-void UART7_IRQHandler(void) __attribute__((interrupt()));
+void UART7_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART7_IRQHandler(void)
 {
     GET_INT_SP();
@@ -378,7 +390,7 @@ void UART7_IRQHandler(void)
 
 
 #ifdef BSP_USING_UART8
-void UART8_IRQHandler(void) __attribute__((interrupt()));
+void UART8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART8_IRQHandler(void)
 {
     GET_INT_SP();
