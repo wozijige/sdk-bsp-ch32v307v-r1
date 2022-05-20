@@ -15,7 +15,7 @@ board:
   sale_contact_global: http://www.wch.cn
   small_image: documents/images/board1.png
   vendor: WCH
-  version: 1.0.7
+  version: 1.0.8
 chip:
   chip_name: CH32V307VCT6
   clock_source: HSE
